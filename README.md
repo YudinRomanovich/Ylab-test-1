@@ -23,7 +23,7 @@
 
 6. Запустите PostgreSQL через Docker:
    ```bash
-   sudo docker run -p 5950:5432 --name test_ylab_lec1 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=postgres -d postgres:13.3
+   sudo docker run -p 5432:5432 --name test_ylab_lec1 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=postgres -d postgres:13.3
 
 7. Запустите контейнер PostgreSQL:
    ```bash
