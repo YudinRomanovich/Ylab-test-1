@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from menu.utils import get_menus, create_menu, update_menu, delete_menu
+from menu.utils import get_menus, get_menu_info, create_menu, update_menu, delete_menu
 
 
 router = APIRouter(
@@ -23,6 +23,19 @@ async def get_menu(
         raise HTTPException(status_code=404, detail="menu not found")
     else:
         return menu_data
+
+    
+
+
+@router.get("/info/{menu_id}")
+async def get_menu_info(
+    menu_data: dict=Depends(get_menu_info)
+):
+    if not menu_data:
+        raise HTTPException(status_code=404, detail="menu not exist")
+    else:
+        return menu_data
+
 
     
 @router.post("/", status_code=201)

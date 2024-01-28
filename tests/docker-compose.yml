@@ -34,4 +34,4 @@ services:
 
 volumes:
   postgres-test-volume:
-    external: true
+    driver: local

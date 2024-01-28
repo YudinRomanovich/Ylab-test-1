@@ -1,11 +1,38 @@
-from sqlalchemy import delete, insert, select, update, and_, func
+from sqlalchemy import delete, insert, select, update, exists
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends
 
 from database import get_async_session
 from menu.models import menu
 from submenu.models import submenu
+from dish.models import dish
 from menu.schemas import MenuCreate, MenuUpdate
+
+
+async def get_menu_info(menu_id: str = None, session: AsyncSession = Depends(get_async_session)):
+    try:
+        # Проверка на валидность menu_id
+        existing_menu = await session.execute(select(exists().where(menu.c.id == menu_id)))
+
+        if not existing_menu.scalar():
+            return None
+        query = select(menu.c.title, menu.c.submenus_count, submenu.c.dishes_count).select_from(menu.join(submenu, menu.c.id == submenu.c.menu_id)).where(menu.c.id == menu_id)        
+
+        result = await session.execute(query)
+        result = result.all()
+        
+        menu_data = []
+
+        for item in result:
+            menu_data.append({
+                "menu title": item[0],
+                "submenus": item[1],
+                "dishes": item[2]
+            })
+    except:
+        return None
+
+    return menu_data
 
 
 async def get_menus(menu_id: str=None, session: AsyncSession=Depends(get_async_session)):
@@ -88,15 +115,23 @@ async def update_menu(menu_id: str, new_updated_menu: MenuUpdate, session: Async
 
 
 async def delete_menu(menu_id: str, session: AsyncSession=Depends(get_async_session)):
-    
+    # find menu
     query = select(menu).where(menu.c.id == menu_id)
     result = await session.execute(query)
     menu_data = result.all()
-
+    # validation
     if not menu_data == []:
+        # find submenu id
+
+        # delete dish from submenu
+
+        # delete submenu
+        
+        # delete menu
         stmt = delete(menu).where(menu_id == menu.c.id)
         await session.execute(stmt)
         await session.commit()
+
         return "menu deleted success"
     else:
         return "menu not exist"

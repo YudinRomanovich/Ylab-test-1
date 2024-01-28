@@ -39,4 +39,4 @@ services:
 
 volumes:
   postgres-volume:
-    external: true
+    driver: local
