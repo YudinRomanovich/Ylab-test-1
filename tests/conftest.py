@@ -1,7 +1,7 @@
 import asyncio
 import pytest
 
-from typing import AsyncGenerator
+from typing import Any, AsyncGenerator
 from httpx import AsyncClient
 
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
@@ -10,12 +10,13 @@ from sqlalchemy.pool import NullPool
 
 from src.database import get_async_session
 from src import metadata
-from src.config import DB_HOST_TEST, DB_NAME_TEST, DB_PASS_TEST, DB_PORT_TEST, DB_USER_TEST
+from src.config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER
 from src.main import app
 
 
 # DATABASE TEST
-DATABASE_URL_TEST = f"postgresql+asyncpg://{DB_USER_TEST}:{DB_PASS_TEST}@{DB_HOST_TEST}:{DB_PORT_TEST}/{DB_NAME_TEST}"
+DATABASE_URL_TEST = f"postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+
 
 # CREATE ENGINE
 engine_test = create_async_engine(DATABASE_URL_TEST, poolclass=NullPool)
@@ -39,7 +40,7 @@ async def prepare_database():
     async with engine_test.begin() as conn:
         await conn.run_sync(metadata.drop_all)
 
-# SETUP
+
 @pytest.fixture(scope="session")
 def event_loop(request):
     loop = asyncio.get_event_loop_policy().new_event_loop()
@@ -51,3 +52,8 @@ def event_loop(request):
 async def ac() -> AsyncGenerator[AsyncClient, None]:
     async with AsyncClient(app=app, base_url="http://test") as ac:
         yield ac
+
+
+@pytest.fixture(scope="session")
+def buffer_data() -> dict[str, Any]:
+    return {}

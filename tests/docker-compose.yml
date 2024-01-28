@@ -1,42 +1,37 @@
-version: "3.7"
+version: '3.7'
 
 services:
-
   db:
     image: postgres:15.1-alpine
-    restart: always
-    container_name: db
+    container_name: db_test
     user: postgres
     expose:
       - "5432"
     ports:
       - "5432:5432"
     volumes:
-      - postgres-volume:/var/lib/postgresql
+      - postgres-test-volume:/var/lib/postgresql
     env_file:
-      - .env
+      - .env_test
     healthcheck:
       test: ["CMD-SHELL", "pg_isready", "-U", "${POSTGRES_USER}", "-d", "${POSTGRES_DB}"]
       interval: 10s
       timeout: 30s
       retries: 5
-
-
+  
   app:
     build: 
-      context: .
+      context: ..
     env_file:
-      - .env
-    container_name: app
-    restart: always
-    command: ["/ylab_app/docker/app.sh"]
+      - .env_test
+    container_name: app_test
+    command: ["/ylab_app/docker/tests.sh"]
     ports:
       - 9999:8000
     depends_on:
       db:
         condition: service_healthy
 
-
 volumes:
-  postgres-volume:
+  postgres-test-volume:
     external: true

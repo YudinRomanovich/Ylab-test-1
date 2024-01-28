@@ -9,5 +9,6 @@ menu = Table(
     Column('id', UUID, primary_key=True, default=uuid.uuid4),
     Column('title', String(255), nullable=False),
     Column('description', String(255), nullable=False),
-    Column('submenus_count', Integer, default=0)
+    Column('submenus_count', Integer, default=0),
+    Column('dishes_count', Integer, default=0),
 )

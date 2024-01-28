@@ -62,7 +62,8 @@ async def create_menu(new_menu: MenuCreate, session: AsyncSession=Depends(get_as
         "id": item[-1][0],
         "title": item[-1][1],
         "description": item[-1][2],
-        "submenus_count": item[-1][3]
+        "submenus_count": item[-1][3],
+        "dishes_count": item[-1][3]
     }
     
     return menu_data
@@ -80,7 +81,8 @@ async def update_menu(menu_id: str, new_updated_menu: MenuUpdate, session: Async
         "id": result[0],
         "title": result[1],
         "description": result[2],
-        "submenus_count": result[3]
+        "submenus_count": result[3],
+        "dishes_count": result[4]
     }
     return menu_data
 

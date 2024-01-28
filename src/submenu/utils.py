@@ -108,3 +108,5 @@ async def delete_submenu(submenu_id: str, session: AsyncSession=Depends(get_asyn
     stmt = delete(submenu).where(submenu_id == submenu.c.id)
     await session.execute(stmt)
     await session.commit()
+
+    return "deleted submenu success"
