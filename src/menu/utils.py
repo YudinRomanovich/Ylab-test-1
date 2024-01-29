@@ -1,6 +1,9 @@
+import uuid
+
 from sqlalchemy import delete, insert, select, update, exists
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends
+
 
 from database import get_async_session
 from menu.models import menu
@@ -122,16 +125,29 @@ async def delete_menu(menu_id: str, session: AsyncSession=Depends(get_async_sess
     # validation
     if not menu_data == []:
         # find submenu id
-
+        query = select(submenu.c.id).where(submenu.c.menu_id == menu_id)
+        result = await session.execute(query)
+        submenu_ids = result.all()
+        
         # delete dish from submenu
+        for item in submenu_ids:
+            submenu_id = item[0]
+            if isinstance(submenu_id, uuid.UUID):
+                stmt = delete(dish).where(dish.c.submenu_id == submenu_id)
+                await session.execute(stmt)
 
         # delete submenu
+        for item in submenu_ids:
+            submenu_id = item[0]
+            if isinstance(submenu_id, uuid.UUID):
+                stmt = delete(submenu).where(submenu.c.id == submenu_id)
+                await session.execute(stmt)
         
         # delete menu
-        stmt = delete(menu).where(menu_id == menu.c.id)
+        stmt = delete(menu).where(menu.c.id == menu_id)
         await session.execute(stmt)
         await session.commit()
 
-        return "menu deleted success"
+        return "menu delete success"
     else:
         return "menu not exist"
