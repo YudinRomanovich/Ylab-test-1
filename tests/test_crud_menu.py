@@ -167,20 +167,3 @@ async def test_get_menus(ac: AsyncGenerator[AsyncClient, None], override_get_asy
 
     # check that response is empty list
     assert menu_data == []
-
-    
-
-# @pytest.mark.asyncio(scope='session')
-# async def test_get_specific_menu_second(ac: AsyncGenerator[AsyncClient, None], override_get_async_session):
-
-#     menu_id = str(saved_id_data['menu'])
-
-#     response = await ac.get(f"/api/v1/menus/{menu_id}")
-
-#     # check that response status HTTP 404 NOT FOUND
-#     assert response.status_code == HTTPStatus.NOT_FOUND
-
-#     menu_data = await get_menus(menu_id=menu_id, session=override_get_async_session)
-
-#     # check that 'menu_id' from environment & response are equal
-#     assert menu_data == None
