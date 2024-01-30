@@ -213,17 +213,26 @@ async def test_get_specific_dish_second(ac: AsyncGenerator[AsyncClient, None], o
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_delete_dish(ac: AsyncGenerator[AsyncClient, None], override_get_async_session, saved_id_data):
+async def test_delete_dish(ac: AsyncGenerator[AsyncClient, None], override_get_async_session):
 
     menu_id = (await get_menus(session=override_get_async_session))[0]['id']
     submenu_id = (await get_submenus(menu_id=menu_id, session=override_get_async_session))[0]['id']
     dish_id = (await get_dishes(submenu_id=submenu_id, session=override_get_async_session))[0]['id']
-    saved_id_data['dish'] = dish_id
 
     response = await ac.delete(f"/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}")
 
     # check that response status HTTP 200 OK
     assert response.status_code == HTTPStatus.OK
+
+    response = await ac.get(f"/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes/{dish_id}")
+
+    # check that response status HTTP 404 NOT FOUND
+    assert response.status_code == HTTPStatus.NOT_FOUND
+
+    dish_data = await get_dishes(submenu_id=submenu_id, dish_id=dish_id, session=override_get_async_session)
+
+    # check that 'dish_id' is not exist
+    assert dish_data == "dish not found"
 
 
 @pytest.mark.asyncio(scope='session')
@@ -241,22 +250,6 @@ async def test_get_dishes_third(ac: AsyncGenerator[AsyncClient, None], override_
 
     # check that response is empty list
     assert dish_data == []
-
-
-# @pytest.mark.asyncio(scope='session')
-# async def test_get_specific_dish_third(ac: AsyncGenerator[AsyncClient, None], override_get_async_session, saved_id_data):
-
-#     menu_id = (await get_menus(session=override_get_async_session))[0]['id']
-#     submenu_id = (await get_submenus(menu_id=menu_id, session=override_get_async_session))[0]['id']
-#     dish_id = saved_id_data['dish']
-
-#     response = await ac.get(f"/api/v1/menus/{menu_id}/submenus/{submenu_id}/dishes/{dish_data['id']}")
-
-#     # check that response status HTTP 200 OK
-#     assert response.status_code == HTTPStatus.NOT_FOUND
-
-#     # check that 'dish_id' from environment & response are equal
-#     assert response.json() == {"detail": "dish not found"}
 
 
 @pytest.mark.asyncio(scope='session')

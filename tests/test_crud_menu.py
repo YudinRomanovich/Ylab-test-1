@@ -134,15 +134,25 @@ async def test_get_specific_menu(ac: AsyncGenerator[AsyncClient, None], override
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_delete_menu(ac: AsyncGenerator[AsyncClient, None], override_get_async_session, saved_id_data):
+async def test_delete_menu(ac: AsyncGenerator[AsyncClient, None], override_get_async_session):
     
     menu_id = (await get_menus(session=override_get_async_session))[0]['id']
-    saved_id_data['menu'] = menu_id
 
     response = await ac.delete(f"/api/v1/menus/{menu_id}")
 
     # check that response status HTTP 200 OK
     assert response.status_code == HTTPStatus.OK
+
+    response = await ac.get(f"/api/v1/menus/{menu_id}")
+
+    # check that response status HTTP 404 NOT FOUND
+    assert response.status_code == HTTPStatus.NOT_FOUND
+
+    menu_data = await get_menus(menu_id=menu_id, session=override_get_async_session)
+
+    # check that 'menu_id' is not exist
+    assert menu_data == "menu not found"
+
 
 
 @pytest.mark.asyncio(scope='session')
@@ -158,19 +168,19 @@ async def test_get_menus(ac: AsyncGenerator[AsyncClient, None], override_get_asy
     # check that response is empty list
     assert menu_data == []
 
+    
 
-@pytest.mark.asyncio(scope='session')
-async def test_get_specific_menu_second(ac: AsyncGenerator[AsyncClient, None], override_get_async_session, saved_id_data):
+# @pytest.mark.asyncio(scope='session')
+# async def test_get_specific_menu_second(ac: AsyncGenerator[AsyncClient, None], override_get_async_session):
 
-    menu_id = str(saved_id_data['menu'])
+#     menu_id = str(saved_id_data['menu'])
 
-    response = await ac.get(f"/api/v1/menus/{menu_id}")
+#     response = await ac.get(f"/api/v1/menus/{menu_id}")
 
-    # check that response status HTTP 404 NOT FOUND
-    assert response.status_code == HTTPStatus.NOT_FOUND
+#     # check that response status HTTP 404 NOT FOUND
+#     assert response.status_code == HTTPStatus.NOT_FOUND
 
-    menu_data = await get_menus(menu_id=menu_id, session=override_get_async_session)
+#     menu_data = await get_menus(menu_id=menu_id, session=override_get_async_session)
 
-    # check that 'menu_id' from environment & response are equal
-    assert menu_data == None
-
+#     # check that 'menu_id' from environment & response are equal
+#     assert menu_data == None

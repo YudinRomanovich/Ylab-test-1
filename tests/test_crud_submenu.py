@@ -172,16 +172,25 @@ async def test_get_specific_submenu_second(ac: AsyncGenerator[AsyncClient, None]
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_delete_submenu(ac: AsyncGenerator[AsyncClient, None], override_get_async_session, saved_id_data):
+async def test_delete_submenu(ac: AsyncGenerator[AsyncClient, None], override_get_async_session):
 
     menu_id = (await get_menus(session=override_get_async_session))[0]['id']
     submenu_id = (await get_submenus(menu_id=menu_id, session=override_get_async_session))[0]['id']
-    saved_id_data['submenu'] = submenu_id
 
     response = await ac.delete(f"/api/v1/menus/{menu_id}/submenus/{submenu_id}")
 
     # check that response status HTTP 200 OK
     assert response.status_code == HTTPStatus.OK
+
+    result = await ac.get(f"/api/v1/menus/{menu_id}/submenus/{submenu_id}")
+
+    # check that response status HTTP 404 NOT FOUND
+    assert result.status_code == HTTPStatus.NOT_FOUND
+
+    submenu_data = await get_submenus(menu_id=menu_id, submenu_id=submenu_id, session=override_get_async_session)
+
+    # check that "submenu" is not exist
+    assert submenu_data == "submenu not found"
 
 
 @pytest.mark.asyncio(scope='session')
@@ -198,21 +207,6 @@ async def test_get_submenus_third(ac: AsyncGenerator[AsyncClient, None], overrid
     
     # check that response is empty list
     assert submenu_data == []
-
-
-@pytest.mark.asyncio(scope='session')
-async def test_get_specific_submenu_third(ac: AsyncGenerator[AsyncClient, None], override_get_async_session, saved_id_data):
-
-    menu_id = (await get_menus(session=override_get_async_session))[0]['id']
-    submenu_id = str(saved_id_data['submenu'])
-
-    response = await ac.get(f"/api/v1/menus/{menu_id}/submenus/{submenu_id}")
-
-    # check that response status HTTP 404 NOT FOUND
-    assert response.status_code == HTTPStatus.NOT_FOUND
-
-    # check that default message & response are equal
-    assert response.json() == {"detail": "submenu not found"}
 
 
 @pytest.mark.asyncio(scope='session')

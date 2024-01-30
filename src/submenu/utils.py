@@ -12,15 +12,23 @@ from dish.models import dish
 async def get_submenus(menu_id: str=None, submenu_id: str=None, submenu_data=None, session: AsyncSession=Depends(get_async_session)):
     
     if menu_id and submenu_id:
-        query = select(submenu).where(submenu_id == submenu.c.id)
+        """return specific submenu or None"""
+        query = select(submenu).where(submenu.c.menu_id == menu_id)
         result = await session.execute(query)
-        for item in result.all():
-            submenu_data = {
-                "id": item[0],
-                "title": item[1],
-                "description": item[2],
-                "dishes_count": item[4]
-            }
+        ans = result.all()
+
+        if ans == []:
+            submenu_data = "submenu not found"
+        else:
+            query = select(submenu).where(submenu_id == submenu.c.id)
+            result = await session.execute(query)
+            for item in result.all():
+                submenu_data = {
+                    "id": item[0],
+                    "title": item[1],
+                    "description": item[2],
+                    "dishes_count": item[4]
+                }
     else:
         query = select(submenu).where(menu_id == submenu.c.menu_id)
         result = await session.execute(query)

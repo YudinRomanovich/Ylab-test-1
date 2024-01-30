@@ -61,7 +61,7 @@ async def get_menus(menu_id: str=None, session: AsyncSession=Depends(get_async_s
         ans = result.all()
         
         if ans == []:
-            menu_data = None
+            menu_data = "menu not found"
         else:
             query = select(submenu).where(submenu.c.menu_id == menu_id)
             result = await session.execute(query)

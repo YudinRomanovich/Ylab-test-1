@@ -52,8 +52,3 @@ def event_loop(request):
 async def ac() -> AsyncGenerator[AsyncClient, None]:
     async with AsyncClient(app=app, base_url="http://test") as ac:
         yield ac
-
-
-@pytest.fixture(scope="session")
-def saved_id_data() -> dict[str, Any]:
-    return {}

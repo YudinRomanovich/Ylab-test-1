@@ -10,7 +10,6 @@ from dish.schemas import DishCreate, DishUpdate
 
 async def get_dishes(submenu_id: str=None, dish_id: str=None, session: AsyncSession=Depends(get_async_session)):
     if not dish_id:
-
         quary = select(dish).where(submenu_id == dish.c.submenu_id)
         result = await session.execute(quary)
         dish_data = []
@@ -23,11 +22,12 @@ async def get_dishes(submenu_id: str=None, dish_id: str=None, session: AsyncSess
             })
 
     else:
+
         quary = select(dish).where(dish_id == dish.c.id)
         result = await session.execute(quary)
         result = result.all()
         if result == []:
-            dish_data = None
+            dish_data = "dish not found"
         else:
             for item in result:
                 dish_data = {

@@ -14,7 +14,7 @@ router = APIRouter(
 async def get_submenu(
     submenu_data=Depends(get_submenus)
 ):
-    if not submenu_data:
+    if submenu_data == "submenu not found":
         raise HTTPException(status_code=404, detail="submenu not found")
     else:
         return submenu_data

@@ -19,12 +19,10 @@ async def get_all_menus(
 async def get_menu(
     menu_data: dict=Depends(get_menus)
 ):
-    if not menu_data:
+    if menu_data == "menu not found":
         raise HTTPException(status_code=404, detail="menu not found")
     else:
         return menu_data
-
-    
 
 
 @router.get("/info/{menu_id}")
@@ -37,7 +35,6 @@ async def get_menu_info(
         return menu_data
 
 
-    
 @router.post("/", status_code=201)
 async def add_menu(
     new_menu=Depends(create_menu)

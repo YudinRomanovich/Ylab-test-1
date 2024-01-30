@@ -20,7 +20,7 @@ async def get_dish(
     dishes_data: dict=Depends(get_dishes)
 ):
 
-    if dishes_data == None:
+    if dishes_data == "dish not found":
         raise HTTPException(status_code=404, detail="dish not found")
     else:
         return dishes_data
