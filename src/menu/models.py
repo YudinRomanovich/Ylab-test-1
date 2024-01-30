@@ -11,4 +11,5 @@ menu = Table(
     Column('description', String(255), nullable=False),
     Column('submenus_count', Integer, default=0),
     Column('dishes_count', Integer, default=0),
+    extend_existing=True
 )

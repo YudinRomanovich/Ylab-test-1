@@ -23,7 +23,7 @@ engine_test = create_async_engine(DATABASE_URL_TEST, poolclass=NullPool)
 async_session_maker = sessionmaker(engine_test, class_=AsyncSession, expire_on_commit=False)
 metadata.bind = engine_test
 
-
+@pytest.fixture(scope="session")
 async def override_get_async_session() -> AsyncGenerator[AsyncSession, None]:
     async with async_session_maker() as session:
         yield session
@@ -55,5 +55,5 @@ async def ac() -> AsyncGenerator[AsyncClient, None]:
 
 
 @pytest.fixture(scope="session")
-def buffer_data() -> dict[str, Any]:
+def saved_id_data() -> dict[str, Any]:
     return {}

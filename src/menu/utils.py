@@ -19,7 +19,7 @@ async def get_menu_info(menu_id: str = None, session: AsyncSession = Depends(get
 
         if not existing_menu.scalar():
             return None
-        query = select(menu.c.title, menu.c.submenus_count, submenu.c.dishes_count).select_from(menu.join(submenu, menu.c.id == submenu.c.menu_id)).where(menu.c.id == menu_id)        
+        query = select(menu.c.id, menu.c.submenus_count, submenu.c.dishes_count).select_from(menu.join(submenu, menu.c.id == submenu.c.menu_id)).where(menu.c.id == menu_id)        
 
         result = await session.execute(query)
         result = result.all()
@@ -28,7 +28,7 @@ async def get_menu_info(menu_id: str = None, session: AsyncSession = Depends(get
 
         for item in result:
             menu_data.append({
-                "menu title": item[0],
+                "id": item[0],
                 "submenus": item[1],
                 "dishes": item[2]
             })
