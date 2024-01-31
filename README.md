@@ -17,7 +17,7 @@
     sudo docker-compose up -d
     ```
 
-4. Swagger доступен на порте 9999, поэтому для доступа в браузере введите http://localhost:8000/docs
+4. Swagger доступен на порте 8000, поэтому для доступа в браузере введите http://localhost:8000/docs
 
 5. Остановка контейнеров:
     ```bash
@@ -31,14 +31,9 @@
     sudo docker-compose down
     ```
 
-2. Перейдите в папку tests:
+2. Запустите docker compose:
     ```bash
-    cd tests
-    ```
-
-3. Запустите docker compose:
-    ```bash
-    sudo docker-compose up
+    sudo docker-compose up -f docker-compose-tests.yml up
     ```
 
 4. Для остановки контейнеров с тестами:
