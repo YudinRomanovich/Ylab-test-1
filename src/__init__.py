@@ -1,1 +1,1 @@
-from database import metadata
+from src.database.database import metadata

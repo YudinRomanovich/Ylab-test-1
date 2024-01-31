@@ -1,21 +1,22 @@
 from fastapi import APIRouter, Depends, HTTPException
 from menu.utils import get_menus, get_menu_info, create_menu, update_menu, delete_menu
+from src.config import MENU_URL, MENUS_URL, MENU_INFO_URL
 
 
 router = APIRouter(
-    prefix="/api/v1/menus",
+    prefix="/api/v1",
     tags=["Menu"]
 )
 
 
-@router.get("/")
+@router.get(MENUS_URL)
 async def get_all_menus(
     menu_data: dict=Depends(get_menus)
 ):
     return menu_data
 
 
-@router.get("/{menu_id}")
+@router.get(MENU_URL)
 async def get_menu(
     menu_data: dict=Depends(get_menus)
 ):
@@ -25,7 +26,7 @@ async def get_menu(
         return menu_data
 
 
-@router.get("/info/{menu_id}")
+@router.get(MENU_INFO_URL)
 async def get_menu_info(
     menu_data: dict=Depends(get_menu_info)
 ):
@@ -35,21 +36,21 @@ async def get_menu_info(
         return menu_data
 
 
-@router.post("/", status_code=201)
+@router.post(MENUS_URL, status_code=201)
 async def add_menu(
     new_menu=Depends(create_menu)
 ):
     return new_menu
 
 
-@router.patch("/{menu_id}")
+@router.patch(MENU_URL)
 async def update_menu(
     updated_menu=Depends(update_menu)
 ):
     return updated_menu
 
 
-@router.delete("/{menu_id}")
+@router.delete(MENU_URL)
 async def delete_menu(
     deleted_menu_data=Depends(delete_menu)
 ):

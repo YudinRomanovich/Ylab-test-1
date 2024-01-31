@@ -22,13 +22,13 @@ services:
   
   api-test:
     build: 
-      context: ..
+      context: .
     env_file:
       - .env_test
     container_name: app_test
     command: ["/bin/sh", "-c", "/ylab_app/docker/tests.sh && /ylab_app/docker/tests_app.sh"]
     ports:
-      - 9999:8000
+      - 8000:8000
     depends_on:
       db:
         condition: service_healthy

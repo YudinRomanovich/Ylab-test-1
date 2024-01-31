@@ -1,14 +1,14 @@
 import asyncio
 import pytest
 
-from typing import Any, AsyncGenerator
+from typing import AsyncGenerator
 from httpx import AsyncClient
 
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
 
-from src.database import get_async_session
+from src.database.database import get_async_session
 from src import metadata
 from src.config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER
 from src.main import app

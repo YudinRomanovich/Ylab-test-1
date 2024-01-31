@@ -31,7 +31,7 @@ services:
     restart: always
     command: ["/ylab_app/docker/app.sh"]
     ports:
-      - 9999:8000
+      - 8000:8000
     depends_on:
       db:
         condition: service_healthy

@@ -2,11 +2,11 @@ from sqlalchemy import delete, insert, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends
 
-from database import get_async_session
-from submenu.models import submenu
+from src.database.database import get_async_session
+from src.database.models import submenu
 from submenu.schemas import SubmenuCreate, SubmenuUpdate
-from menu.models import menu
-from dish.models import dish
+from src.database.models import menu
+from src.database.models import dish
 
 
 async def get_submenus(menu_id: str=None, submenu_id: str=None, submenu_data=None, session: AsyncSession=Depends(get_async_session)):

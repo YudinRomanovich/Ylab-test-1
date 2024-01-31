@@ -5,10 +5,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends
 
 
-from database import get_async_session
-from menu.models import menu
-from submenu.models import submenu
-from dish.models import dish
+from src.database.database import get_async_session
+from src.database.models import menu
+from src.database.models import submenu
+from src.database.models import dish
 from menu.schemas import MenuCreate, MenuUpdate
 
 
