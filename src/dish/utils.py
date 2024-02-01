@@ -5,8 +5,20 @@ from fastapi import Depends
 from database.database import get_async_session
 from database.models import dish
 from database.models import submenu
-from dish.schemas import DishCreate, DishUpdate
+from database.schemas import DishCreate, DishUpdate
 
+
+class DishRepository:
+
+    def __init__(
+        self,
+        db,
+        submenu_repo
+    ) -> None:
+        pass
+        
+
+    pass
 
 async def get_dishes(submenu_id: str=None, dish_id: str=None, session: AsyncSession=Depends(get_async_session)):
     if not dish_id:

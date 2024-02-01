@@ -4,12 +4,9 @@ from sqlalchemy import delete, insert, select, update, exists
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends
 
-
 from database.database import get_async_session
-from database.models import menu
-from database.models import submenu
-from database.models import dish
-from menu.schemas import MenuCreate, MenuUpdate
+from database.models import menu, submenu, dish
+from database.schemas import MenuCreate, MenuUpdate
 
 
 async def get_menu_info(menu_id: str = None, session: AsyncSession = Depends(get_async_session)):

@@ -4,7 +4,7 @@ from fastapi import Depends
 
 from database.database import get_async_session
 from database.models import submenu
-from submenu.schemas import SubmenuCreate, SubmenuUpdate
+from database.schemas import SubmenuCreate, SubmenuUpdate
 from database.models import menu
 from database.models import dish
 

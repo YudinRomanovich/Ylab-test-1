@@ -1,18 +1,24 @@
 from fastapi import APIRouter, Depends, HTTPException
 from dish.utils import create_dish, get_dishes, update_dish, delete_dish
 from config import DISH_URL, DISHES_URL
+from database.schemas import DishRead, DishCreate
 
 
 router = APIRouter(
     prefix='/api/v1',
-    tags=["Dish"]
+    tags=["Dishes"]
 )
 
 
-@router.get(DISHES_URL)
+@router.get(
+    DISHES_URL,
+    response_model=list[DishRead],
+    status_code=200,
+    summary="All dishes"
+)
 async def get_all_dishes(
-    dishes_data=Depends(get_dishes)
-):
+    dishes_data: DishRead=Depends(get_dishes)
+) -> list[DishRead]:
     return dishes_data
 
 
