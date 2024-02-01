@@ -43,11 +43,11 @@ class SubmenuCreate(BaseModel):
 
 class SubmenuRead(BaseModel):
     model_config = ConfigDict()
-    
+
     id: UUID
-    name: str
-    menu_id: int
-    
+    title: str
+    description: str
+
 
 class SubmenuUpdate(BaseModel):
     model_config = ConfigDict()

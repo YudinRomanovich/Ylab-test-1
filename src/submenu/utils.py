@@ -45,7 +45,7 @@ async def get_submenus(menu_id: str=None, submenu_id: str=None, submenu_data=Non
 
 
 async def create_submenu(menu_id: str, new_submenu: SubmenuCreate, session: AsyncSession=Depends(get_async_session)):
-    # проверить существует ли такое меню если нет то создаем подменю без указания подменю
+    # проверить существует ли такое меню если нет то создаем подменю без указания меню
     query = select(menu).where(menu_id == menu.c.id)
     result = await session.execute(query)
     
