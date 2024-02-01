@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from dish.utils import create_dish, get_dishes, update_dish, delete_dish
-from src.config import DISH_URL, DISHES_URL
+from config import DISH_URL, DISHES_URL
 
 
 router = APIRouter(
-    prefix="/api/v1/menus",
+    prefix='/api/v1',
     tags=["Dish"]
 )
 

@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from menu.utils import get_menus, get_menu_info, create_menu, update_menu, delete_menu
-from src.config import MENU_URL, MENUS_URL, MENU_INFO_URL
+from config import MENU_URL, MENUS_URL, MENU_INFO_URL
 
 
 router = APIRouter(
-    prefix="/api/v1",
+    prefix='/api/v1',
     tags=["Menu"]
 )
 

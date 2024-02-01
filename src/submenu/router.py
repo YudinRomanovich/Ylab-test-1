@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from submenu.utils import create_submenu, get_submenus, update_submenu, delete_submenu
-from src.config import SUBMENU_URL, SUBMENUS_URL
+from config import SUBMENU_URL, SUBMENUS_URL
 
 
 router = APIRouter(
-    prefix="/api/v1",
+    prefix='/api/v1',
     tags=["Submenu"]
 )
 

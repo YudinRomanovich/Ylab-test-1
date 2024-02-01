@@ -2,9 +2,9 @@ from sqlalchemy import delete, insert, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends
 
-from src.database.database import get_async_session
-from src.database.models import dish
-from src.database.models import submenu
+from database.database import get_async_session
+from database.models import dish
+from database.models import submenu
 from dish.schemas import DishCreate, DishUpdate
 
 

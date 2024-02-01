@@ -1,6 +1,6 @@
 import uuid
 from sqlalchemy import Column, ForeignKey, Integer, Numeric, String, Table, UniqueConstraint, UUID
-from src.database.database import metadata
+from database.database import metadata
 
 
 menu = Table(

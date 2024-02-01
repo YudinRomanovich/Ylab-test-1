@@ -3,7 +3,7 @@ import os
 
 load_dotenv()
 
-
+API_URL = '/api/v1'
 MENUS_URL = '/menus'
 MENU_URL = '/menus/{menu_id}'
 MENU_INFO_URL = '/info/{menu_id}'

@@ -7,6 +7,8 @@ from src.menu.utils import get_menus
 from src.submenu.utils import get_submenus
 from src.dish.utils import get_dishes
 
+from src.config import MENU_URL, MENUS_URL, SUBMENU_URL, SUBMENUS_URL, API_URL
+
 
 @pytest.mark.asyncio(scope='session')
 async def test_create_menu(ac: AsyncGenerator[AsyncClient, None], override_get_async_session):
@@ -16,7 +18,7 @@ async def test_create_menu(ac: AsyncGenerator[AsyncClient, None], override_get_a
         "description": "My menu description 1"
     }
 
-    response = await ac.post("/api/v1/menus/", json=json_data)
+    response = await ac.post(API_URL + MENUS_URL, json=json_data)
     
     # check that response status HTTP 201 CREATED
     assert response.status_code == HTTPStatus.CREATED
@@ -294,7 +296,7 @@ async def test_delete_menu(ac: AsyncGenerator[AsyncClient, None], override_get_a
 @pytest.mark.asyncio(scope='session')
 async def test_get_menus(ac: AsyncGenerator[AsyncClient, None], override_get_async_session):
 
-    response = await ac.get("/api/v1/menus/")
+    response = await ac.get(API_URL + MENUS_URL)
 
     # check that response status HTTP 200 OK
     assert response.status_code == HTTPStatus.OK
