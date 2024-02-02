@@ -14,7 +14,6 @@ class MenuCreate(BaseModel):
 class MenuInfo(BaseModel):
     model_config = ConfigDict()
 
-    title: str
     submenus_count: int
     dishes_count: int
 
@@ -25,6 +24,8 @@ class MenuRead(BaseModel):
     id: UUID
     title: str
     description: str
+    submenus_count: int
+    dishes_count: int
 
 
 class MenuUpdate(BaseModel):
@@ -47,6 +48,7 @@ class SubmenuRead(BaseModel):
     id: UUID
     title: str
     description: str
+    dishes_count: int
 
 
 class SubmenuUpdate(BaseModel):

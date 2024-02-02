@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm.exc import NoResultFound
 from config import SUBMENU_URL, SUBMENUS_URL
 from database.schemas import SubmenuRead, SubmenuCreate, SubmenuUpdate
-from submenu.submenu_crud_repo import SubmenuRepository
+from submenu.crud_submenu_repo import SubmenuRepository
 
 
 router = APIRouter(

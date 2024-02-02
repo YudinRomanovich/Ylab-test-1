@@ -6,7 +6,7 @@ from fastapi import Depends
 from database.database import get_async_session
 from database.models import Submenu
 from database.schemas import SubmenuCreate, SubmenuUpdate
-from menu.menu_crud_repo import MenuRepository
+from menu.crud_menu_repo import MenuRepository
 from database.services import check_objects
 
 

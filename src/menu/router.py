@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
-from menu.menu_crud_repo import MenuRepository
+from menu.crud_menu_repo import MenuRepository
 from config import MENU_URL, MENUS_URL, MENU_INFO_URL
 from sqlalchemy.orm.exc import NoResultFound
 from database.schemas import MenuRead, MenuCreate, MenuInfo
