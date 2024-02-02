@@ -21,6 +21,23 @@ services:
       timeout: 30s
       retries: 5
 
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    volumes:
+      - ylab_redis_data:/data
+    expose:
+      - "6379"
+    ports:
+      - "6379:6379"
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 1s
+      timeout: 3s
+      retries: 5
 
   app:
     build: 
@@ -35,8 +52,12 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_healthy
 
 
 volumes:
   postgres-volume:
+    driver: local
+  ylab_redis_data:
     driver: local
