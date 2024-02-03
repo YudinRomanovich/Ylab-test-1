@@ -1,9 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm.exc import NoResultFound
 from config import SUBMENU_URL, SUBMENUS_URL
 from database.schemas import SubmenuRead, SubmenuCreate, SubmenuUpdate
-from submenu.crud_submenu_repo import SubmenuRepository
+from submenu.service_submenu_repo import SubmenuService
 
 
 router = APIRouter(
@@ -21,11 +21,14 @@ router = APIRouter(
 async def get_submenu(
     menu_id: str,
     submenu_id: str,
-    repo: SubmenuRepository = Depends(),
+    background_tasks: BackgroundTasks,
+    repo: SubmenuService = Depends(),
 ) -> SubmenuRead:
     try:
         return await repo.get_specific_submenu(
-            submenu_id=submenu_id
+            menu_id=menu_id,
+            submenu_id=submenu_id,
+            background_tasks=background_tasks
         )
     except NoResultFound as e:
         raise HTTPException(
@@ -42,10 +45,11 @@ async def get_submenu(
 )
 async def get_submenus(
     menu_id: str,
-    submenu_repo: SubmenuRepository = Depends()
+    background_tasks: BackgroundTasks,
+    submenu_repo: SubmenuService = Depends()
 ) -> list[SubmenuRead]:
 
-    return await submenu_repo.get_all_submenus(menu_id=menu_id)
+    return await submenu_repo.get_submenus(menu_id=menu_id, background_tasks=background_tasks)
 
 
 @router.post(
@@ -57,12 +61,14 @@ async def get_submenus(
 async def add_submenu(
     new_submenu: SubmenuCreate,
     menu_id: str,
-    submenu_repo: SubmenuRepository = Depends()
+    background_tasks: BackgroundTasks,
+    submenu_repo: SubmenuService = Depends()
 ) -> SubmenuRead:
     try:
         return await submenu_repo.create_submenu(
             menu_id=menu_id,
-            new_submenu=new_submenu
+            new_submenu=new_submenu,
+            background_tasks=background_tasks
         )
     except NoResultFound as e:
         raise HTTPException(
@@ -81,12 +87,15 @@ async def update_submenu(
     menu_id: str,
     submenu_id: str,
     updated_submenu: SubmenuUpdate,
-    submenu_repo: SubmenuRepository = Depends()
+    background_tasks: BackgroundTasks,
+    submenu_repo: SubmenuService = Depends()
 ) -> SubmenuRead:
     try:
         return await submenu_repo.update_submenu(
+            menu_id=menu_id,
             submenu_id=submenu_id,
-            updated_submenu=updated_submenu
+            updated_submenu=updated_submenu,
+            background_tasks=background_tasks
         )
     except NoResultFound as e:
         raise HTTPException(
@@ -103,10 +112,15 @@ async def update_submenu(
 async def delete_submenu(
     menu_id: str,
     submenu_id: str,
-    submenu_repo: SubmenuRepository = Depends()
+    background_tasks: BackgroundTasks,
+    submenu_repo: SubmenuService = Depends()
 ) -> JSONResponse:
     try:
-        await submenu_repo.delete_submenu(submenu_id=submenu_id)
+        await submenu_repo.delete_specific_submenu(
+            menu_id=menu_id,
+            submenu_id=submenu_id,
+            background_tasks=background_tasks
+        )
         return JSONResponse(
             status_code=200,
             content='submenu deleted',

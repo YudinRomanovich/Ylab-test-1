@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from fastapi.responses import JSONResponse
-from menu.crud_menu_repo import MenuRepository
+from menu.service_menu_repo import MenuService
 from config import MENU_URL, MENUS_URL, MENU_INFO_URL
 from sqlalchemy.orm.exc import NoResultFound
 from database.schemas import MenuRead, MenuCreate, MenuInfo
@@ -19,10 +19,10 @@ router = APIRouter(
     summary="Get all menus"
 )
 async def get_all_menus(
-    menu_repo: MenuRepository = Depends()
+    background_tasks: BackgroundTasks,
+    menu_repo: MenuService = Depends()
 ) -> MenuRead:
-    return await menu_repo.get_menus()
-
+    return await menu_repo.get_menus(background_tasks=background_tasks)
 
 @router.get(
     MENU_URL,
@@ -32,16 +32,16 @@ async def get_all_menus(
 )
 async def get_menu(
     menu_id: str,
-    menu_repo: MenuRepository = Depends()
+    background_tasks: BackgroundTasks,
+    menu_repo: MenuService = Depends()
 ) -> MenuRead:
     try:
-        return await menu_repo.get_specific_menu(menu_id=menu_id)
+        return await menu_repo.get_specific_menu(menu_id=menu_id, background_tasks=background_tasks)
     except NoResultFound as e:
         raise HTTPException(
             status_code=404,
             detail=e.args[0],
         )
-
 
 @router.get(
     MENU_INFO_URL,
@@ -51,16 +51,16 @@ async def get_menu(
 )
 async def get_menu_info(
     menu_id: str,
-    menu_repo: MenuRepository = Depends()
+    background_tasks: BackgroundTasks,
+    menu_repo: MenuService = Depends()
 ):
     try:
-        return await menu_repo.get_specific_menu_info(menu_id=menu_id)
+        return await menu_repo.get_specific_menu_info(menu_id=menu_id, background_tasks=background_tasks)
     except NoResultFound as e:
         raise HTTPException(
             status_code=404,
             detail=e.args[0],
         )
-
 
 @router.post(
     MENUS_URL,
@@ -70,10 +70,10 @@ async def get_menu_info(
 )
 async def add_menu(
     menu: MenuCreate,
-    menu_repo: MenuRepository = Depends()
+    background_tasks: BackgroundTasks,
+    menu_repo: MenuService = Depends()
 ) -> MenuRead:
-    return await menu_repo.create_menu(new_menu=menu)
-
+    return await menu_repo.create_menu(menu=menu, background_tasks=background_tasks)
 
 @router.patch(
     MENU_URL,
@@ -84,19 +84,20 @@ async def add_menu(
 async def update_menu(
     menu_id: str,
     updated_menu: MenuCreate,
-    menu_repo: MenuRepository = Depends()
+    background_tasks: BackgroundTasks,
+    menu_repo: MenuService = Depends()
 ) -> MenuRead:
     try:
         return await menu_repo.update_menu(
             menu_id=menu_id,
-            updated_menu=updated_menu
+            updated_menu=updated_menu,
+            background_tasks=background_tasks
         )
     except NoResultFound as e:
         raise HTTPException(
             status_code=404,
             detail=e.args[0],
         )
-
 
 @router.delete(
     MENU_URL,
@@ -105,11 +106,13 @@ async def update_menu(
 )
 async def delete_menu(
     menu_id: str,
-    repo: MenuRepository = Depends(),
+    background_tasks: BackgroundTasks,
+    menu_repo: MenuService = Depends(),
 ) -> JSONResponse:
     try:
-        await repo.delete_specific_menu(
+        await menu_repo.delete_specific_menu(
             menu_id=menu_id,
+            background_tasks=background_tasks
         )
         return JSONResponse(
             status_code=200,
