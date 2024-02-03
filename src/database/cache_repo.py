@@ -4,7 +4,7 @@ from aioredis import Redis
 from fastapi import Depends
 
 from database.database import get_redis
-from database.models import Menu, Submenu
+from database.models import Menu, Submenu, Dish
 
 from config import (
     EXPIRE,
@@ -12,7 +12,9 @@ from config import (
     MENUS_URL,
     MENU_INFO_URL,
     SUBMENU_URL,
-    SUBMENUS_URL
+    SUBMENUS_URL,
+    DISH_URL,
+    DISHES_URL
 )
 
 class CacheRepository:
@@ -133,4 +135,45 @@ class CacheRepository:
             SUBMENU_URL.format(menu_id=menu_id, submenu_id=submenu_id),
         )
         await self.delete_all_submenu_cache(menu_id=menu_id)
-    
+
+    async def set_all_dishes_cache(self, menu_id: str, submenu_id: str, dishes_data: list[Dish]) -> None:
+        await self.cacher.set(
+            DISHES_URL.format(menu_id=menu_id, submenu_id=submenu_id),
+            pickle.dumps(dishes_data),
+            ex=EXPIRE,
+        )
+
+    async def get_all_dishes_cache(self, menu_id: str, submenu_id: str) -> list[Dish] | None:
+        cache = await self.cacher.get(DISHES_URL.format(menu_id=menu_id, submenu_id=submenu_id))
+        if cache:
+            dishes_data = pickle.loads(cache)
+            return dishes_data
+        return None
+
+    async def set_dish_cache(self, menu_id: str, submenu_id: str, dish_data: Dish) -> None:
+        await self.cacher.set(
+            DISH_URL.format(menu_id=menu_id, submenu_id=submenu_id, dish_id=str(dish_data.id)),
+            pickle.dumps(dish_data),
+            ex=EXPIRE,
+        )
+
+    async def get_dish_cache(self, menu_id: str, submenu_id: str, dish_id: str) -> Submenu | None:
+        cache = await self.cacher.get(DISH_URL.format(menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id))
+        if cache:
+            dish_data = pickle.loads(cache)
+            return dish_data
+        return None
+
+    async def update_dish_cache(self, menu_id: str, submenu_id: str, dish_data: Dish) -> None:
+
+        await self.delete_all_dish_cache(menu_id=menu_id, submenu_id=submenu_id)
+        await self.set_dish_cache(menu_id=menu_id, submenu_id=submenu_id, dish_data=dish_data)
+
+    async def delete_all_dish_cache(self, menu_id: str, submenu_id: str) -> None:
+        await self.cacher.delete(DISHES_URL.format(menu_id=menu_id, submenu_id=submenu_id))
+
+    async def delete_dish_cache(self, menu_id: str, submenu_id: str, dish_id: str) -> None:
+        await self.delete_cache_by_mask(
+            DISH_URL.format(menu_id=menu_id, submenu_id=submenu_id, dish_id=dish_id),
+        )
+        await self.delete_all_dish_cache(menu_id=menu_id, submenu_id=submenu_id)
