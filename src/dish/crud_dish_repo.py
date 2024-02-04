@@ -1,7 +1,7 @@
+from fastapi import Depends
 from sqlalchemy import insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm.exc import NoResultFound
-from fastapi import Depends
 
 from database.database import get_async_session
 from database.models import Dish
@@ -20,7 +20,7 @@ class DishRepository:
         self.session = session
         self.submenu_repo = submenu_repo
         self.model = Dish
-        
+
     async def create_dish(
             self,
             dish_data: DishCreate,
@@ -35,13 +35,16 @@ class DishRepository:
             )
         except NoResultFound as error:
             raise NoResultFound(error.args[0])
-        
-        stmt = insert(self.model).values(**dish_data.model_dump(), submenu_id=submenu_id)
+
+        stmt = insert(self.model).values(
+            **dish_data.model_dump(),
+            submenu_id=submenu_id
+        )
         await self.session.execute(stmt)
         await self.session.commit()
 
         return await self.get_specific_dish(self.model.id)
-    
+
     async def get_specific_dish(
             self,
             dish_id: str
@@ -65,7 +68,6 @@ class DishRepository:
             select(self.model).where(self.model.submenu_id == submenu_id)
         )).scalars().all())
 
-
     async def update_specific_dish(
             self,
             dish_id: str,
@@ -74,7 +76,7 @@ class DishRepository:
         dish_data = await self.get_specific_dish(dish_id=dish_id)
         if not dish_data:
             raise NoResultFound('dish not found')
-        
+
         dish_data.title = updated_dish.title
         dish_data.description = updated_dish.description
         dish_data.price = updated_dish.price
@@ -82,7 +84,7 @@ class DishRepository:
         await self.session.commit()
         await self.session.refresh(dish_data)
         return dish_data
-    
+
     async def delete_specific_dish(
             self,
             dish_id: str

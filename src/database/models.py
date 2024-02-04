@@ -1,6 +1,20 @@
 import uuid
-from sqlalchemy import DECIMAL, Column, ForeignKey, Integer, Numeric, String, Table, UniqueConstraint, UUID, func, select
-from sqlalchemy.orm import relationship, column_property
+
+from sqlalchemy import (
+    DECIMAL,
+    UUID,
+    Column,
+    ForeignKey,
+    Integer,
+    Numeric,
+    String,
+    Table,
+    UniqueConstraint,
+    func,
+    select,
+)
+from sqlalchemy.orm import column_property, relationship
+
 from database.database import Base, metadata
 
 
@@ -113,7 +127,7 @@ class Menu(Base):
 
 
 menu = Table(
-    "menu",
+    'menu',
     metadata,
     Column('id', UUID, primary_key=True, default=uuid.uuid4),
     Column('title', String(255), nullable=False),
@@ -125,7 +139,7 @@ menu = Table(
 
 
 dish = Table(
-    "dish",
+    'dish',
     metadata,
     Column('id', UUID, primary_key=True, default=uuid.uuid4),
     Column('title', String(255), nullable=False),
@@ -137,7 +151,7 @@ dish = Table(
 
 
 submenu = Table(
-    "submenu",
+    'submenu',
     metadata,
     Column('id', UUID, primary_key=True, default=uuid.uuid4),
     Column('title', String(255), nullable=False),
