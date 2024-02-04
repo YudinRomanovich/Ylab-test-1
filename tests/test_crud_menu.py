@@ -3,74 +3,76 @@ from typing import AsyncGenerator
 from httpx._client import AsyncClient
 from http import HTTPStatus
 
-from src.menu.utils import get_menus
+from tests.services import reverse
 
-from src.config import MENU_URL, MENUS_URL, API_URL
-
-
-@pytest.mark.asyncio(scope='session')
-async def test_get_menus(ac: AsyncGenerator[AsyncClient, None], override_get_async_session):
-
-    response = await ac.get(API_URL + MENUS_URL)
-
-    # check that response status HTTP 200 OK
-    assert response.status_code == HTTPStatus.OK
-
-    menu_data = await get_menus(session=override_get_async_session)
-    # check that response is empty list
-    assert response.json() == menu_data, "Response is not an empty list"
+from src.menu.router import (
+    get_menu,
+    get_all_menus,
+    update_menu,
+    create_menu,
+    delete_menu
+)
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_create_menu(ac: AsyncGenerator[AsyncClient, None], override_get_async_session):
+async def test_get_menus(ac: AsyncGenerator[AsyncClient, None]) -> None:
+    response = await ac.get(
+        reverse(get_all_menus),
+    )
+    assert response.status_code == HTTPStatus.OK, \
+        'Response not 200'
+    assert response.json() == [], 'Responce not empty list'
 
-    json_data = {
-        "title": "My menu 1",
-        "description": "My menu description 1"
-    }
 
-    response = await ac.post(API_URL + MENUS_URL, json=json_data)
+@pytest.mark.asyncio(scope='session')
+async def test_create_menu(ac: AsyncGenerator[AsyncClient, None], menu_post: dict[str, str]) -> None:
+
+    response = await ac.post(
+        reverse(create_menu),
+        json=menu_post,
+    )
     
     # check that response status HTTP 201 CREATED
     assert response.status_code == HTTPStatus.CREATED
 
-    data = response.json()
+    assert 'id' in response.json()
 
-    # check that new record added to the database
-    result = await get_menus(menu_id=str(data['id']), session=override_get_async_session)
+    assert 'title' in response.json()
 
-    assert result is not None
+    assert 'description' in response.json()
 
-    # check that 'menu_id' from environment & response are equal
-    assert data["id"] == str(result["id"])
+    assert 'submenus_count' in response.json()
 
-    # check that 'menu_title' from environment & response are equal
-    assert data["title"] == result["title"]
+    assert 'dishes_count' in response.json()
 
-    # check that 'menu_description' from environment & response are equal
-    assert data["description"] == result["description"]
+    assert response.json()['title'] == menu_post['title']
+
+    assert response.json()['description'] == menu_post['description']
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_get_menus_two(ac: AsyncGenerator[AsyncClient, None], override_get_async_session):
+async def test_get_menus_two(ac: AsyncGenerator[AsyncClient, None]) -> None:
 
-    response = await ac.get(API_URL + MENUS_URL)
+    response = await ac.get(
+        reverse(get_all_menus)
+    )
 
     # check that response status HTTP 200 OK
     assert response.status_code == HTTPStatus.OK
 
-    menu_data = await get_menus(session=override_get_async_session)
-
     # check that response is empty list
-    assert not response.json() == menu_data, "Response is empty list"
+    assert not response.json() == [], "Response is empty list"
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_get_specific_menu(ac: AsyncGenerator[AsyncClient, None], override_get_async_session):
+async def test_get_specific_menu(ac: AsyncGenerator[AsyncClient, None]):
 
-    menu_data = (await get_menus(session=override_get_async_session))[0]
+    menu_data = (await ac.get(reverse(get_all_menus))).json()[0]
+    menu_id = menu_data['id']
 
-    response = await ac.get(f"/api/v1/menus/{menu_data['id']}")
+    response = await ac.get(
+        reverse(get_menu, menu_id=menu_id)
+    )
 
     # check that response status HTTP 200 OK
     assert response.status_code == HTTPStatus.OK
@@ -86,16 +88,15 @@ async def test_get_specific_menu(ac: AsyncGenerator[AsyncClient, None], override
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_update_menu(ac: AsyncGenerator[AsyncClient, None], override_get_async_session):
+async def test_update_menu(ac: AsyncGenerator[AsyncClient, None], menu_patch: dict[str, str]):
 
-    menu_data = (await get_menus(session=override_get_async_session))[0]
+    menu_data = (await ac.get(reverse(get_all_menus))).json()[0]
+    menu_id = menu_data['id']
     
-    json_data = {
-        "title": "My updated menu 1",
-        "description": "My updated menu description 1"
-    }
-
-    response = await ac.patch(f"/api/v1/menus/{menu_data['id']}", json=json_data)
+    response = await ac.patch(
+        reverse(update_menu, menu_id=menu_id),
+        json=menu_patch
+    )
 
     # check that response status HTTP 200 OK
     assert response.status_code == HTTPStatus.OK
@@ -106,21 +107,26 @@ async def test_update_menu(ac: AsyncGenerator[AsyncClient, None], override_get_a
     # check that 'menu_description' from environment & response are not equal
     assert not response.json()["description"] == menu_data["description"]
 
-    menu_data = (await get_menus(session=override_get_async_session))[0]
+    menu_data = await ac.get(
+        reverse(get_menu, menu_id=menu_id)
+    )
 
     # check that 'menu_title' from environment & response are equal
-    assert response.json()["title"] == menu_data["title"]
+    assert response.json()["title"] == menu_data.json()["title"]
 
     # check that 'menu_description' from environment & response are equal
-    assert response.json()["description"] == menu_data["description"]
+    assert response.json()["description"] == menu_data.json()["description"]
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_get_specific_menu(ac: AsyncGenerator[AsyncClient, None], override_get_async_session):
+async def test_get_specific_menu(ac: AsyncGenerator[AsyncClient, None]):
 
-    menu_data = (await get_menus(session=override_get_async_session))[0]
+    menu_data = (await ac.get(reverse(get_all_menus))).json()[0]
+    menu_id = menu_data['id']
 
-    response = await ac.get(f"/api/v1/menus/{menu_data['id']}")
+    response = await ac.get(
+        reverse(get_menu, menu_id=menu_id)
+    )
 
     # check that response status HTTP 200 OK
     assert response.status_code == HTTPStatus.OK
@@ -136,36 +142,34 @@ async def test_get_specific_menu(ac: AsyncGenerator[AsyncClient, None], override
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_delete_menu(ac: AsyncGenerator[AsyncClient, None], override_get_async_session):
+async def test_delete_menu(ac: AsyncGenerator[AsyncClient, None]):
     
-    menu_id = (await get_menus(session=override_get_async_session))[0]['id']
+    menu_data = (await ac.get(reverse(get_all_menus))).json()[0]
+    menu_id = menu_data['id']
 
-    response = await ac.delete(f"/api/v1/menus/{menu_id}")
+    response = await ac.delete(
+        reverse(delete_menu, menu_id=menu_id)
+    )
 
     # check that response status HTTP 200 OK
     assert response.status_code == HTTPStatus.OK
 
-    response = await ac.get(f"/api/v1/menus/{menu_id}")
+    menu_data = await ac.get(
+        reverse(get_menu, menu_id=menu_id)
+    )
 
-    # check that response status HTTP 404 NOT FOUND
-    assert response.status_code == HTTPStatus.NOT_FOUND
-
-    menu_data = await get_menus(menu_id=menu_id, session=override_get_async_session)
-
-    # check that 'menu_id' is not exist
-    assert menu_data == "menu not found"
-
+    assert menu_data.json()['detail'] == "menu not found"
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_get_menus(ac: AsyncGenerator[AsyncClient, None], override_get_async_session):
+async def test_get_menus_last(ac: AsyncGenerator[AsyncClient, None]):
 
-    response = await ac.get(API_URL + MENUS_URL)
+    response = await ac.get(
+        reverse(get_all_menus)
+    )
 
     # check that response status HTTP 200 OK
     assert response.status_code == HTTPStatus.OK
 
-    menu_data = (await get_menus(session=override_get_async_session))
-
     # check that response is empty list
-    assert menu_data == []
+    assert response.json() == []

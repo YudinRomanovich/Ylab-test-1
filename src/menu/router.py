@@ -21,7 +21,7 @@ router = APIRouter(
 async def get_all_menus(
     background_tasks: BackgroundTasks,
     menu_repo: MenuService = Depends()
-) -> MenuRead:
+) -> list[MenuRead]:
     return await menu_repo.get_menus(background_tasks=background_tasks)
 
 @router.get(
@@ -68,7 +68,7 @@ async def get_menu_info(
     status_code=201,
     summary="Create new menu"
 )
-async def add_menu(
+async def create_menu(
     menu: MenuCreate,
     background_tasks: BackgroundTasks,
     menu_repo: MenuService = Depends()
