@@ -1,10 +1,10 @@
-from database.database_main import get_async_session
-from database.models import Menu
-from database.schemas import MenuCreate
 from fastapi import Depends
 from sqlalchemy import insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm.exc import NoResultFound
+from src.database.database_main import get_async_session
+from src.database.models import Menu
+from src.database.schemas import MenuCreate
 
 
 class MenuRepository:

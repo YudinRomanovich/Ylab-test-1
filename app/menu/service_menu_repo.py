@@ -1,8 +1,8 @@
-from database.cache_repo import CacheRepository
-from database.models import Menu
-from database.schemas import MenuCreate
 from fastapi import BackgroundTasks, Depends
-from menu.crud_menu_repo import MenuRepository
+from src.database.cache_repo import CacheRepository
+from src.database.models import Menu
+from src.database.schemas import MenuCreate
+from src.menu.crud_menu_repo import MenuRepository
 
 
 class MenuService:

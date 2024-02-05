@@ -1,8 +1,8 @@
-from config import DISH_URL, DISHES_URL
-from database.schemas import DishCreate, DishRead, DishUpdate
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm.exc import NoResultFound
+from src.config import DISH_URL, DISHES_URL
+from src.database.schemas import DishCreate, DishRead, DishUpdate
 
 from .service_dish_repo import DishService
 

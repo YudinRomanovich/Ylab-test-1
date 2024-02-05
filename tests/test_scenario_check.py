@@ -3,10 +3,9 @@ from http import HTTPStatus
 import pytest
 from httpx._client import AsyncClient
 from services import reverse
-
-from app.dish.router import add_dish, get_dishes
-from app.menu.router import create_menu, delete_menu, get_all_menus, get_menu
-from app.submenu.router import add_submenu, delete_submenu, get_submenu, get_submenus
+from src.dish.router import add_dish, get_dishes
+from src.menu.router import create_menu, delete_menu, get_all_menus, get_menu
+from src.submenu.router import add_submenu, delete_submenu, get_submenu, get_submenus
 
 
 @pytest.mark.asyncio(scope='session')

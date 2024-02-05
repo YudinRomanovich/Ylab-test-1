@@ -1,7 +1,8 @@
 import pickle
 
 from aioredis import Redis
-from config import (
+from fastapi import Depends
+from src.config import (
     DISH_URL,
     DISHES_URL,
     EXPIRE,
@@ -11,9 +12,8 @@ from config import (
     SUBMENU_URL,
     SUBMENUS_URL,
 )
-from database.database_main import get_redis
-from database.models import Dish, Menu, Submenu
-from fastapi import Depends
+from src.database.database_main import get_redis
+from src.database.models import Dish, Menu, Submenu
 
 
 class CacheRepository:

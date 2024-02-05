@@ -24,7 +24,7 @@ engine_test = create_async_engine(DATABASE_URL_TEST)
 async_session_maker = sessionmaker(autocommit=False, autoflush=False,
                                    bind=engine_test, class_=AsyncSession)
 
-pytest_plugins = 'fixtures'
+pytest_plugins = 'tests.fixtures'
 
 
 @pytest.fixture(scope='session')

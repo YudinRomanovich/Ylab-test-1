@@ -1,7 +1,7 @@
-from database.models import Dish, Menu, Submenu
 from sqlalchemy import exists, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm.exc import NoResultFound
+from src.database.models import Dish, Menu, Submenu
 
 
 async def check_objects(

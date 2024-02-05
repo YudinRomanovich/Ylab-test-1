@@ -1,6 +1,6 @@
 from typing import Callable
 
-from app.main import app
+from src.main import app
 
 
 def get_all_routes() -> dict[str, str]:

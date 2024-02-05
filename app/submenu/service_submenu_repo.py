@@ -1,8 +1,8 @@
-from database.cache_repo import CacheRepository
-from database.models import Submenu
-from database.schemas import SubmenuCreate, SubmenuUpdate
 from fastapi import BackgroundTasks, Depends
-from submenu.crud_submenu_repo import SubmenuRepository
+from src.database.cache_repo import CacheRepository
+from src.database.models import Submenu
+from src.database.schemas import SubmenuCreate, SubmenuUpdate
+from src.submenu.crud_submenu_repo import SubmenuRepository
 
 
 class SubmenuService:

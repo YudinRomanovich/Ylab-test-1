@@ -3,13 +3,11 @@ from http import HTTPStatus
 import pytest
 from httpx._client import AsyncClient
 from services import reverse
+from src.dish.router import add_dish, delete_dish, get_dish, get_dishes, update_dish
+from src.menu.router import create_menu, delete_menu, get_all_menus
+from src.submenu.router import add_submenu, delete_submenu, get_submenus
 
-from app.dish.router import add_dish, delete_dish, get_dish, get_dishes, update_dish
-from app.menu.router import create_menu, delete_menu, get_all_menus
-from app.submenu.router import add_submenu, delete_submenu, get_submenus
 
-
-@pytest.mark.asyncio(scope='session')
 async def test_create_menu(ac: AsyncClient, menu_post: dict[str, str]) -> None:
 
     response = await ac.post(
@@ -23,7 +21,6 @@ async def test_create_menu(ac: AsyncClient, menu_post: dict[str, str]) -> None:
     assert 'id' in response.json()
 
 
-@pytest.mark.asyncio(scope='session')
 async def test_create_submenu(ac: AsyncClient, submenu_post: dict[str, str]):
 
     menu_data = (await ac.get(reverse(get_all_menus))).json()[0]

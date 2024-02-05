@@ -1,7 +1,7 @@
-from database.cache_repo import CacheRepository
-from database.models import Dish
-from database.schemas import DishCreate, DishUpdate
 from fastapi import BackgroundTasks, Depends
+from src.database.cache_repo import CacheRepository
+from src.database.models import Dish
+from src.database.schemas import DishCreate, DishUpdate
 
 from .crud_dish_repo import DishRepository
 

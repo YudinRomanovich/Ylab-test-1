@@ -3,9 +3,8 @@ from http import HTTPStatus
 import pytest
 from httpx._client import AsyncClient
 from services import reverse
-
-from app.menu.router import create_menu, delete_menu, get_all_menus, get_menu
-from app.submenu.router import (
+from src.menu.router import create_menu, delete_menu, get_all_menus, get_menu
+from src.submenu.router import (
     add_submenu,
     delete_submenu,
     get_submenu,

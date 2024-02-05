@@ -1,12 +1,10 @@
 import asyncio
-from typing import AsyncGenerator
 
 import pytest
-from conftest import engine_test, override_get_async_session
+from conftest import engine_test
 from httpx import AsyncClient
-
-from app.database.database_main import Base, get_async_session
-from app.main import app
+from src.database.database_main import Base
+from src.main import app
 
 
 @pytest.fixture(autouse=True, scope='session')
@@ -23,8 +21,7 @@ def event_loop(request):
 
 
 @pytest.fixture(scope='session')
-async def ac() -> AsyncGenerator[AsyncClient, None]:
-    app.dependency_overrides[get_async_session] = override_get_async_session
+async def ac():
     async with AsyncClient(app=app, base_url='http://test') as ac:
         yield ac
 

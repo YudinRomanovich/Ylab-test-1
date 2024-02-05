@@ -1,9 +1,9 @@
 from typing import AsyncGenerator
 
 from aioredis import ConnectionPool, Redis
-from config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER, REDIS_URL
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
+from src.config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER, REDIS_URL
 
 DATABASE_URL = f'postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
 
