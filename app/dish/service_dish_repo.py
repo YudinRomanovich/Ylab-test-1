@@ -1,8 +1,9 @@
 from database.cache_repo import CacheRepository
-from dish.crud_dish_repo import DishRepository
-from fastapi import BackgroundTasks, Depends
 from database.models import Dish
 from database.schemas import DishCreate, DishUpdate
+from fastapi import BackgroundTasks, Depends
+
+from .crud_dish_repo import DishRepository
 
 
 class DishService:
@@ -27,7 +28,7 @@ class DishService:
         dish_data = await self.crud_repo.get_all_dishes(submenu_id=submenu_id)
         background_tasks.add_task(self.cache_repo.set_all_dishes_cache, menu_id, submenu_id, dish_data)
         return dish_data
-    
+
     async def get_specific_dish(
         self,
         menu_id: str,
@@ -62,7 +63,7 @@ class DishService:
             dish_data
         )
         return dish_data
-    
+
     async def update_dish(
         self,
         menu_id: str,
@@ -82,7 +83,7 @@ class DishService:
             dish_data
         )
         return dish_data
-    
+
     async def delete_specific_dish(
         self,
         menu_id: str,

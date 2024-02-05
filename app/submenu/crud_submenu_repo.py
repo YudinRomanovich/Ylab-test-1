@@ -1,13 +1,12 @@
+from database.database_main import get_async_session
+from database.models import Submenu
+from database.schemas import SubmenuCreate, SubmenuUpdate
+from database.services import check_objects
+from fastapi import Depends
+from menu.crud_menu_repo import MenuRepository
 from sqlalchemy import insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm.exc import NoResultFound
-from fastapi import Depends
-
-from database.database import get_async_session
-from database.models import Submenu
-from database.schemas import SubmenuCreate, SubmenuUpdate
-from menu.crud_menu_repo import MenuRepository
-from database.services import check_objects
 
 
 class SubmenuRepository:

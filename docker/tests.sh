@@ -1,6 +1,5 @@
 #!/bin/bash
 
-alembic upgrade head
+# alembic upgrade head
 
 pytest -vv tests/
-

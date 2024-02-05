@@ -1,9 +1,8 @@
-from fastapi import BackgroundTasks, Depends
-
-from menu.crud_menu_repo import MenuRepository
 from database.cache_repo import CacheRepository
 from database.models import Menu
 from database.schemas import MenuCreate
+from fastapi import BackgroundTasks, Depends
+from menu.crud_menu_repo import MenuRepository
 
 
 class MenuService:
@@ -52,7 +51,6 @@ class MenuService:
             menu_data
         )
         return menu_data
-
 
     async def create_menu(
         self,

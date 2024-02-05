@@ -1,12 +1,11 @@
+from database.database_main import get_async_session
+from database.models import Dish
+from database.schemas import DishCreate, DishUpdate
+from database.services import check_objects
 from fastapi import Depends
 from sqlalchemy import insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm.exc import NoResultFound
-
-from database.database import get_async_session
-from database.models import Dish
-from database.schemas import DishCreate, DishUpdate
-from database.services import check_objects
 from submenu.crud_submenu_repo import SubmenuRepository
 
 

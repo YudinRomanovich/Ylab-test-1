@@ -1,6 +1,7 @@
 from typing import Callable
 
-from src.main import app
+from app.main import app
+
 
 def get_all_routes() -> dict[str, str]:
     routes = {}
@@ -8,10 +9,11 @@ def get_all_routes() -> dict[str, str]:
         routes[route.endpoint.__name__] = route.path
     return routes
 
+
 def reverse(
-        func: Callable,
-        routes: dict[str, str] = get_all_routes(),
-        **kwargs
-    ) -> str:
+    func: Callable,
+    routes: dict[str, str] = get_all_routes(),
+    **kwargs
+) -> str:
     path = routes[func.__name__]
     return path.format(**kwargs)

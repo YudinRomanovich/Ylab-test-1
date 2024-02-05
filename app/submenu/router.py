@@ -1,14 +1,13 @@
-from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
+from config import SUBMENU_URL, SUBMENUS_URL
+from database.schemas import SubmenuCreate, SubmenuRead, SubmenuUpdate
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm.exc import NoResultFound
-from config import SUBMENU_URL, SUBMENUS_URL
-from database.schemas import SubmenuRead, SubmenuCreate, SubmenuUpdate
 from submenu.service_submenu_repo import SubmenuService
-
 
 router = APIRouter(
     prefix='/api/v1',
-    tags=["Submenu"]
+    tags=['Submenu']
 )
 
 
@@ -16,7 +15,7 @@ router = APIRouter(
     SUBMENU_URL,
     response_model=SubmenuRead,
     status_code=200,
-    summary="Get specific submenu"
+    summary='Get specific submenu'
 )
 async def get_submenu(
     menu_id: str,
@@ -41,7 +40,7 @@ async def get_submenu(
     SUBMENUS_URL,
     response_model=list[SubmenuRead],
     status_code=200,
-    summary="Get submenus"
+    summary='Get submenus'
 )
 async def get_submenus(
     menu_id: str,
@@ -56,7 +55,7 @@ async def get_submenus(
     SUBMENUS_URL,
     response_model=SubmenuRead,
     status_code=201,
-    summary="Create submenu"
+    summary='Create submenu'
 )
 async def add_submenu(
     new_submenu: SubmenuCreate,
@@ -81,7 +80,7 @@ async def add_submenu(
     SUBMENU_URL,
     response_model=SubmenuRead,
     status_code=200,
-    summary="Update submenu"
+    summary='Update submenu'
 )
 async def update_submenu(
     menu_id: str,
@@ -107,7 +106,7 @@ async def update_submenu(
 @router.delete(
     SUBMENU_URL,
     status_code=200,
-    summary="Delete submenu"
+    summary='Delete submenu'
 )
 async def delete_submenu(
     menu_id: str,

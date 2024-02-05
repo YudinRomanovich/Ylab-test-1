@@ -1,6 +1,6 @@
 from decimal import Decimal
-from typing import Optional
 from uuid import UUID
+
 from pydantic import BaseModel, ConfigDict
 
 
@@ -31,8 +31,8 @@ class MenuRead(BaseModel):
 class MenuUpdate(BaseModel):
     model_config = ConfigDict()
 
-    title: Optional[str]
-    description: Optional[str]
+    title: str | None
+    description: str | None
 
 
 class SubmenuCreate(BaseModel):
@@ -54,8 +54,8 @@ class SubmenuRead(BaseModel):
 class SubmenuUpdate(BaseModel):
     model_config = ConfigDict()
 
-    title: Optional[str]
-    description: Optional[str]
+    title: str | None
+    description: str | None
 
 
 class DishCreate(BaseModel):

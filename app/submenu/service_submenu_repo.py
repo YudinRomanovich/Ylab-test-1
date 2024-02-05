@@ -1,9 +1,8 @@
 from database.cache_repo import CacheRepository
-from submenu.crud_submenu_repo import SubmenuRepository
-from fastapi import BackgroundTasks, Depends
 from database.models import Submenu
 from database.schemas import SubmenuCreate, SubmenuUpdate
-
+from fastapi import BackgroundTasks, Depends
+from submenu.crud_submenu_repo import SubmenuRepository
 
 
 class SubmenuService:
@@ -27,7 +26,7 @@ class SubmenuService:
         submenu_data = await self.crud_repo.get_all_submenus(menu_id=menu_id)
         background_tasks.add_task(self.cache_repo.set_all_submenus_cache, menu_id, submenu_data)
         return submenu_data
-    
+
     async def get_specific_submenu(
         self,
         menu_id: str,
@@ -58,7 +57,7 @@ class SubmenuService:
             submenu_data
         )
         return submenu_data
-    
+
     async def update_submenu(
         self,
         menu_id: str,
@@ -76,7 +75,7 @@ class SubmenuService:
             submenu_data
         )
         return submenu_data
-    
+
     async def delete_specific_submenu(
         self,
         menu_id: str,

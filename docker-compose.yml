@@ -40,13 +40,13 @@ services:
       retries: 5
 
   app:
-    build: 
+    build:
       context: .
     env_file:
       - .env
     container_name: app
     restart: always
-    command: ["/ylab_app/docker/app.sh"]
+    command: ["/code/docker/app.sh"]
     ports:
       - 8000:8000
     depends_on:

@@ -1,21 +1,20 @@
-import pytest
-from typing import AsyncGenerator
-from httpx._client import AsyncClient
 from http import HTTPStatus
 
-from tests.services import reverse
+import pytest
+from httpx._client import AsyncClient
+from services import reverse
 
-from src.menu.router import (
-    get_menu,
-    get_all_menus,
-    update_menu,
+from app.menu.router import (
     create_menu,
-    delete_menu
+    delete_menu,
+    get_all_menus,
+    get_menu,
+    update_menu,
 )
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_get_menus(ac: AsyncGenerator[AsyncClient, None]) -> None:
+async def test_get_menus(ac: AsyncClient) -> None:
     response = await ac.get(
         reverse(get_all_menus),
     )
@@ -25,13 +24,13 @@ async def test_get_menus(ac: AsyncGenerator[AsyncClient, None]) -> None:
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_create_menu(ac: AsyncGenerator[AsyncClient, None], menu_post: dict[str, str]) -> None:
+async def test_create_menu(ac: AsyncClient, menu_post: dict[str, str]) -> None:
 
     response = await ac.post(
         reverse(create_menu),
         json=menu_post,
     )
-    
+
     # check that response status HTTP 201 CREATED
     assert response.status_code == HTTPStatus.CREATED
 
@@ -51,7 +50,7 @@ async def test_create_menu(ac: AsyncGenerator[AsyncClient, None], menu_post: dic
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_get_menus_two(ac: AsyncGenerator[AsyncClient, None]) -> None:
+async def test_get_menus_two(ac: AsyncClient) -> None:
 
     response = await ac.get(
         reverse(get_all_menus)
@@ -61,11 +60,11 @@ async def test_get_menus_two(ac: AsyncGenerator[AsyncClient, None]) -> None:
     assert response.status_code == HTTPStatus.OK
 
     # check that response is empty list
-    assert not response.json() == [], "Response is empty list"
+    assert not response.json() == [], 'Response is empty list'
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_get_specific_menu(ac: AsyncGenerator[AsyncClient, None]):
+async def test_get_specific_menu(ac: AsyncClient):
 
     menu_data = (await ac.get(reverse(get_all_menus))).json()[0]
     menu_id = menu_data['id']
@@ -78,21 +77,21 @@ async def test_get_specific_menu(ac: AsyncGenerator[AsyncClient, None]):
     assert response.status_code == HTTPStatus.OK
 
     # check that 'menu_id' from environment & response are equal
-    assert response.json()["id"] == str(menu_data["id"])
+    assert response.json()['id'] == str(menu_data['id'])
 
     # check that 'submenus_count' from environment & response are equal
-    assert response.json()["title"] == menu_data["title"]
+    assert response.json()['title'] == menu_data['title']
 
     # check that 'dishes_count' from environment & response are equal
-    assert response.json()["description"] == menu_data["description"]
+    assert response.json()['description'] == menu_data['description']
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_update_menu(ac: AsyncGenerator[AsyncClient, None], menu_patch: dict[str, str]):
+async def test_update_menu(ac: AsyncClient, menu_patch: dict[str, str]):
 
     menu_data = (await ac.get(reverse(get_all_menus))).json()[0]
     menu_id = menu_data['id']
-    
+
     response = await ac.patch(
         reverse(update_menu, menu_id=menu_id),
         json=menu_patch
@@ -102,24 +101,24 @@ async def test_update_menu(ac: AsyncGenerator[AsyncClient, None], menu_patch: di
     assert response.status_code == HTTPStatus.OK
 
     # check that 'menu_title' from environment & response are not equal
-    assert not response.json()["title"] == menu_data["title"]
+    assert not response.json()['title'] == menu_data['title']
 
     # check that 'menu_description' from environment & response are not equal
-    assert not response.json()["description"] == menu_data["description"]
+    assert not response.json()['description'] == menu_data['description']
 
     menu_data = await ac.get(
         reverse(get_menu, menu_id=menu_id)
     )
 
     # check that 'menu_title' from environment & response are equal
-    assert response.json()["title"] == menu_data.json()["title"]
+    assert response.json()['title'] == menu_data.json()['title']
 
     # check that 'menu_description' from environment & response are equal
-    assert response.json()["description"] == menu_data.json()["description"]
+    assert response.json()['description'] == menu_data.json()['description']
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_get_specific_menu(ac: AsyncGenerator[AsyncClient, None]):
+async def test_get_specific_menu_second(ac: AsyncClient):
 
     menu_data = (await ac.get(reverse(get_all_menus))).json()[0]
     menu_id = menu_data['id']
@@ -132,18 +131,18 @@ async def test_get_specific_menu(ac: AsyncGenerator[AsyncClient, None]):
     assert response.status_code == HTTPStatus.OK
 
     # check that 'menu_id' from environment & response are equal
-    assert response.json()["id"] == str(menu_data["id"])
+    assert response.json()['id'] == str(menu_data['id'])
 
     # check that 'submenus_count' from environment & response are equal
-    assert response.json()["title"] == menu_data["title"]
+    assert response.json()['title'] == menu_data['title']
 
     # check that 'dishes_count' from environment & response are equal
-    assert response.json()["description"] == menu_data["description"]
+    assert response.json()['description'] == menu_data['description']
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_delete_menu(ac: AsyncGenerator[AsyncClient, None]):
-    
+async def test_delete_menu(ac: AsyncClient):
+
     menu_data = (await ac.get(reverse(get_all_menus))).json()[0]
     menu_id = menu_data['id']
 
@@ -158,11 +157,11 @@ async def test_delete_menu(ac: AsyncGenerator[AsyncClient, None]):
         reverse(get_menu, menu_id=menu_id)
     )
 
-    assert menu_data.json()['detail'] == "menu not found"
+    assert menu_data.json()['detail'] == 'menu not found'
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_get_menus_last(ac: AsyncGenerator[AsyncClient, None]):
+async def test_get_menus_last(ac: AsyncClient):
 
     response = await ac.get(
         reverse(get_all_menus)

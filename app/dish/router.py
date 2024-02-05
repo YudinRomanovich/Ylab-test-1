@@ -1,43 +1,45 @@
-from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
-from fastapi.responses import JSONResponse
 from config import DISH_URL, DISHES_URL
-from database.schemas import DishRead, DishCreate, DishUpdate
-from dish.service_dish_repo import DishService
+from database.schemas import DishCreate, DishRead, DishUpdate
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm.exc import NoResultFound
 
+from .service_dish_repo import DishService
 
 router = APIRouter(
     prefix='/api/v1',
-    tags=["Dishes"]
+    tags=['Dishes']
 )
+
 
 @router.get(
     DISHES_URL,
     response_model=list[DishRead],
     status_code=200,
-    summary="All dishes"
+    summary='All dishes'
 )
 async def get_dishes(
-    menu_id:str,
+    menu_id: str,
     submenu_id: str,
     background_tasks: BackgroundTasks,
     dish_repo: DishService = Depends()
 ) -> list[DishRead]:
-    
+
     return await dish_repo.get_dishes(
         menu_id=menu_id,
         submenu_id=submenu_id,
         background_tasks=background_tasks
     )
 
+
 @router.get(
     DISH_URL,
     response_model=DishRead,
     status_code=200,
-    summary="Get specific dish"
+    summary='Get specific dish'
 )
 async def get_dish(
-    menu_id:str,
+    menu_id: str,
     submenu_id: str,
     dish_id: str,
     background_tasks: BackgroundTasks,
@@ -52,7 +54,7 @@ async def get_dish(
             background_tasks=background_tasks
         )
     except NoResultFound as e:
-         raise HTTPException(
+        raise HTTPException(
             status_code=404,
             detail=str(e)
         )
@@ -62,7 +64,7 @@ async def get_dish(
     DISHES_URL,
     status_code=201,
     response_model=DishRead,
-    summary="Add new dish"
+    summary='Add new dish'
 )
 async def add_dish(
     menu_id: str,
@@ -79,28 +81,28 @@ async def add_dish(
             background_tasks=background_tasks
         )
     except NoResultFound as e:
-         raise HTTPException(
-              status_code=404,
-              detail=e.args[0]
-         )
+        raise HTTPException(
+            status_code=404,
+            detail=e.args[0]
+        )
 
 
 @router.patch(
     DISH_URL,
     status_code=200,
     response_model=DishRead,
-    summary="Update existing dish",
+    summary='Update existing dish',
 )
 async def update_dish(
-    menu_id:str,
+    menu_id: str,
     submenu_id: str,
-    dish_id:str,
+    dish_id: str,
     updated_dish: DishUpdate,
     background_tasks: BackgroundTasks,
     dish_repo: DishService = Depends()
 ) -> DishRead:
     try:
-        return await  dish_repo.update_dish(
+        return await dish_repo.update_dish(
             menu_id=menu_id,
             submenu_id=submenu_id,
             dish_id=dish_id,
@@ -109,18 +111,19 @@ async def update_dish(
         )
     except NoResultFound as e:
         raise HTTPException(
-             status_code=404,
-             detail=e.args[0]
+            status_code=404,
+            detail=e.args[0]
         )
+
 
 @router.delete(
     DISH_URL,
     response_model=DishRead,
     status_code=200,
-    summary="Delete a specific dish",
+    summary='Delete a specific dish',
 )
 async def delete_dish(
-    menu_id:str,
+    menu_id: str,
     submenu_id: str,
     dish_id: str,
     background_tasks: BackgroundTasks,

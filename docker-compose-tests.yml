@@ -19,7 +19,7 @@ services:
       interval: 10s
       timeout: 30s
       retries: 5
-  
+
   redis:
     image: redis:latest
     container_name: redis
@@ -39,12 +39,12 @@ services:
       retries: 5
 
   api-test:
-    build: 
+    build:
       context: .
     env_file:
       - .env_test
     container_name: app_test
-    command: ["/bin/sh", "-c", "/ylab_app/docker/tests.sh && /ylab_app/docker/tests_app.sh"]
+    command: ["/code/docker/tests.sh"]
     ports:
       - 8000:8000
     depends_on:
