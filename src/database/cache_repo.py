@@ -2,6 +2,7 @@ import pickle
 
 from aioredis import Redis
 from fastapi import Depends
+
 from src.config import (
     DISH_URL,
     DISHES_URL,

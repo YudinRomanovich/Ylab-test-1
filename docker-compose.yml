@@ -45,6 +45,8 @@ services:
     env_file:
       - .env
     container_name: app
+    environment:
+      - PYTHONPATH=/code
     restart: always
     command: ["/code/docker/app.sh"]
     ports:

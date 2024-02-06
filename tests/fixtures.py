@@ -1,10 +1,12 @@
 import asyncio
 
 import pytest
-from conftest import engine_test
 from httpx import AsyncClient
+
 from src.database.database_main import Base
 from src.main import app
+
+from .conftest import engine_test
 
 
 @pytest.fixture(autouse=True, scope='session')

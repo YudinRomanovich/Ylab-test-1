@@ -11,6 +11,7 @@ from sqlalchemy import (
     select,
 )
 from sqlalchemy.orm import column_property, relationship
+
 from src.database.database_main import Base
 
 

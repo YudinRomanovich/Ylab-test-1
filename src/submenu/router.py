@@ -1,6 +1,7 @@
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm.exc import NoResultFound
+
 from src.config import SUBMENU_URL, SUBMENUS_URL
 from src.database.schemas import SubmenuCreate, SubmenuRead, SubmenuUpdate
 from src.submenu.service_submenu_repo import SubmenuService

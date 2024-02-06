@@ -1,4 +1,5 @@
 from fastapi import BackgroundTasks, Depends
+
 from src.database.cache_repo import CacheRepository
 from src.database.models import Submenu
 from src.database.schemas import SubmenuCreate, SubmenuUpdate

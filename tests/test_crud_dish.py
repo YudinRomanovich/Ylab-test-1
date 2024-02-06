@@ -2,10 +2,12 @@ from http import HTTPStatus
 
 import pytest
 from httpx._client import AsyncClient
-from services import reverse
+
 from src.dish.router import add_dish, delete_dish, get_dish, get_dishes, update_dish
 from src.menu.router import create_menu, delete_menu, get_all_menus
 from src.submenu.router import add_submenu, delete_submenu, get_submenus
+
+from .services import reverse
 
 
 async def test_create_menu(ac: AsyncClient, menu_post: dict[str, str]) -> None:
