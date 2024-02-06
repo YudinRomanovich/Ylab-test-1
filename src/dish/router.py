@@ -37,7 +37,8 @@ async def get_dishes(
     DISH_URL,
     response_model=DishRead,
     status_code=200,
-    summary='Get specific dish'
+    summary='Get specific dish',
+    responses={404: {'detail': 'dish not found'}}
 )
 async def get_dish(
     menu_id: str,
@@ -65,7 +66,8 @@ async def get_dish(
     DISHES_URL,
     status_code=201,
     response_model=DishRead,
-    summary='Add new dish'
+    summary='Add new dish',
+    responses={404: {'detail': 'dish not found'}}
 )
 async def add_dish(
     menu_id: str,
@@ -93,6 +95,7 @@ async def add_dish(
     status_code=200,
     response_model=DishRead,
     summary='Update existing dish',
+    responses={404: {'detail': 'dish not found'}}
 )
 async def update_dish(
     menu_id: str,
@@ -122,6 +125,7 @@ async def update_dish(
     response_model=DishRead,
     status_code=200,
     summary='Delete a specific dish',
+    responses={404: {'detail': 'dish not found'}}
 )
 async def delete_dish(
     menu_id: str,

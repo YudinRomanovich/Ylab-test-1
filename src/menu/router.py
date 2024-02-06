@@ -16,7 +16,8 @@ router = APIRouter(
     MENUS_URL,
     response_model=list[MenuRead],
     status_code=200,
-    summary='Get all menus'
+    summary='Get all menus',
+    responses={404: {'detail': 'menu not found'}}
 )
 async def get_all_menus(
     background_tasks: BackgroundTasks,
@@ -29,7 +30,8 @@ async def get_all_menus(
     MENU_URL,
     response_model=MenuRead,
     status_code=200,
-    summary='Get a specific menu'
+    summary='Get a specific menu',
+    responses={404: {'detail': 'menu not found'}}
 )
 async def get_menu(
     menu_id: str,
@@ -49,13 +51,14 @@ async def get_menu(
     MENU_INFO_URL,
     response_model=MenuInfo,
     status_code=200,
-    summary='Get specific menu counters'
+    summary='Get specific menu counters',
+    responses={404: {'detail': 'menu not found'}}
 )
 async def get_menu_info(
     menu_id: str,
     background_tasks: BackgroundTasks,
     menu_repo: MenuService = Depends()
-):
+) -> MenuInfo:
     try:
         return await menu_repo.get_specific_menu_info(menu_id=menu_id, background_tasks=background_tasks)
     except NoResultFound as e:
@@ -69,7 +72,8 @@ async def get_menu_info(
     MENUS_URL,
     response_model=MenuRead,
     status_code=201,
-    summary='Create new menu'
+    summary='Create new menu',
+    responses={404: {'detail': 'menu not found'}}
 )
 async def create_menu(
     menu: MenuCreate,
@@ -83,7 +87,8 @@ async def create_menu(
     MENU_URL,
     response_model=MenuRead,
     status_code=200,
-    summary='Update menu'
+    summary='Update menu',
+    responses={404: {'detail': 'menu not found'}}
 )
 async def update_menu(
     menu_id: str,
@@ -107,7 +112,8 @@ async def update_menu(
 @router.delete(
     MENU_URL,
     status_code=200,
-    summary='Delete menu'
+    summary='Delete menu',
+    responses={404: {'detail': 'menu not found'}}
 )
 async def delete_menu(
     menu_id: str,

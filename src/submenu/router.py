@@ -16,7 +16,8 @@ router = APIRouter(
     SUBMENU_URL,
     response_model=SubmenuRead,
     status_code=200,
-    summary='Get specific submenu'
+    summary='Get specific submenu',
+    responses={404: {'detail': 'submenu not found'}}
 )
 async def get_submenu(
     menu_id: str,
@@ -41,7 +42,8 @@ async def get_submenu(
     SUBMENUS_URL,
     response_model=list[SubmenuRead],
     status_code=200,
-    summary='Get submenus'
+    summary='Get submenus',
+    responses={404: {'detail': 'submenu not found'}}
 )
 async def get_submenus(
     menu_id: str,
@@ -56,7 +58,8 @@ async def get_submenus(
     SUBMENUS_URL,
     response_model=SubmenuRead,
     status_code=201,
-    summary='Create submenu'
+    summary='Create submenu',
+    responses={404: {'detail': 'submenu not found'}}
 )
 async def add_submenu(
     new_submenu: SubmenuCreate,
@@ -81,7 +84,8 @@ async def add_submenu(
     SUBMENU_URL,
     response_model=SubmenuRead,
     status_code=200,
-    summary='Update submenu'
+    summary='Update submenu',
+    responses={404: {'detail': 'submenu not found'}}
 )
 async def update_submenu(
     menu_id: str,
@@ -107,7 +111,8 @@ async def update_submenu(
 @router.delete(
     SUBMENU_URL,
     status_code=200,
-    summary='Delete submenu'
+    summary='Delete submenu',
+    responses={404: {'detail': 'submenu not found'}}
 )
 async def delete_submenu(
     menu_id: str,

@@ -4,16 +4,14 @@ from aioredis import ConnectionPool, Redis
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
-from src.config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER, REDIS_URL
-
-DATABASE_URL = f'postgresql+asyncpg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
+from src.config import DATABASE_CONNECTION, REDIS_URL
 
 
 class Base(DeclarativeBase):
     pass
 
 
-engine = create_async_engine(DATABASE_URL)
+engine = create_async_engine(DATABASE_CONNECTION)
 async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
 
 

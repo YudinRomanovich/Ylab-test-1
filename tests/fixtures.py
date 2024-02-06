@@ -10,7 +10,7 @@ from .conftest import engine_test
 
 
 @pytest.fixture(autouse=True, scope='session')
-async def prepare_database():
+async def prepare_database() -> None:
     async with engine_test.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
@@ -23,7 +23,7 @@ def event_loop(request):
 
 
 @pytest.fixture(scope='session')
-async def ac():
+async def ac() -> AsyncClient:
     async with AsyncClient(app=app, base_url='http://test') as ac:
         yield ac
 

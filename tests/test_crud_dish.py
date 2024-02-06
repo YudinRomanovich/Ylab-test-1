@@ -23,7 +23,7 @@ async def test_create_menu(ac: AsyncClient, menu_post: dict[str, str]) -> None:
     assert 'id' in response.json()
 
 
-async def test_create_submenu(ac: AsyncClient, submenu_post: dict[str, str]):
+async def test_create_submenu(ac: AsyncClient, submenu_post: dict[str, str]) -> None:
 
     menu_data = (await ac.get(reverse(get_all_menus))).json()[0]
     menu_id = menu_data['id']
@@ -40,7 +40,7 @@ async def test_create_submenu(ac: AsyncClient, submenu_post: dict[str, str]):
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_get_dishes_first(ac: AsyncClient):
+async def test_get_dishes_first(ac: AsyncClient) -> None:
 
     menu_data = (await ac.get(reverse(get_all_menus))).json()[0]
     menu_id = menu_data['id']
@@ -57,7 +57,7 @@ async def test_get_dishes_first(ac: AsyncClient):
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_create_dish(ac: AsyncClient, dish_post: dict[str, str]):
+async def test_create_dish(ac: AsyncClient, dish_post: dict[str, str]) -> None:
 
     menu_data = (await ac.get(reverse(get_all_menus))).json()[0]
     menu_id = menu_data['id']
@@ -85,7 +85,7 @@ async def test_create_dish(ac: AsyncClient, dish_post: dict[str, str]):
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_get_dishes_second(ac: AsyncClient):
+async def test_get_dishes_second(ac: AsyncClient) -> None:
 
     menu_data = (await ac.get(reverse(get_all_menus))).json()[0]
     menu_id = menu_data['id']
@@ -102,7 +102,7 @@ async def test_get_dishes_second(ac: AsyncClient):
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_get_specific_dish_first(ac: AsyncClient):
+async def test_get_specific_dish_first(ac: AsyncClient) -> None:
 
     menu_data = (await ac.get(reverse(get_all_menus))).json()[0]
     menu_id = menu_data['id']
@@ -129,7 +129,7 @@ async def test_get_specific_dish_first(ac: AsyncClient):
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_update_dish(ac: AsyncClient, dish_patch: dict[str, str]):
+async def test_update_dish(ac: AsyncClient, dish_patch: dict[str, str]) -> None:
 
     menu_data = (await ac.get(reverse(get_all_menus))).json()[0]
     menu_id = menu_data['id']
@@ -164,7 +164,7 @@ async def test_update_dish(ac: AsyncClient, dish_patch: dict[str, str]):
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_get_specific_dish_second(ac: AsyncClient):
+async def test_get_specific_dish_second(ac: AsyncClient) -> None:
 
     menu_data = (await ac.get(reverse(get_all_menus))).json()[0]
     menu_id = menu_data['id']
@@ -191,7 +191,7 @@ async def test_get_specific_dish_second(ac: AsyncClient):
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_delete_dish(ac: AsyncClient):
+async def test_delete_dish(ac: AsyncClient) -> None:
 
     menu_data = (await ac.get(reverse(get_all_menus))).json()[0]
     menu_id = menu_data['id']
@@ -215,7 +215,7 @@ async def test_delete_dish(ac: AsyncClient):
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_get_dishes_third(ac: AsyncClient):
+async def test_get_dishes_third(ac: AsyncClient) -> None:
 
     menu_data = (await ac.get(reverse(get_all_menus))).json()[0]
     menu_id = menu_data['id']
@@ -232,7 +232,7 @@ async def test_get_dishes_third(ac: AsyncClient):
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_delete_submenu(ac: AsyncClient):
+async def test_delete_submenu(ac: AsyncClient) -> None:
 
     menu_data = (await ac.get(reverse(get_all_menus))).json()[0]
     menu_id = menu_data['id']
@@ -246,7 +246,7 @@ async def test_delete_submenu(ac: AsyncClient):
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_get_submenus(ac: AsyncClient):
+async def test_get_submenus(ac: AsyncClient) -> None:
 
     menu_data = (await ac.get(reverse(get_all_menus))).json()[0]
     menu_id = menu_data['id']
@@ -261,7 +261,7 @@ async def test_get_submenus(ac: AsyncClient):
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_delete_menu(ac: AsyncClient):
+async def test_delete_menu(ac: AsyncClient) -> None:
 
     menu_data = (await ac.get(reverse(get_all_menus))).json()[0]
     menu_id = menu_data['id']
@@ -275,7 +275,7 @@ async def test_delete_menu(ac: AsyncClient):
 
 
 @pytest.mark.asyncio(scope='session')
-async def test_get_menus(ac: AsyncClient):
+async def test_get_menus(ac: AsyncClient) -> None:
 
     response = await ac.get(
         reverse(get_all_menus)
