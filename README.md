@@ -4,7 +4,7 @@
 
 1. Склонируйте репозиторий:
     ```bash
-    git clone git@github.com:YudinRomanovich/ylab_app.git
+    git clone git@github.com:YudinRomanovich/rest_app.git
     ```
 
 2. Перейдите в папку с проектом:
